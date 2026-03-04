@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Three Fields — Structure, Space, and the Grammar of Interaction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+:root {
+  --bg: #0a0a0f;
+  --bg-card: #12121a;
+  --bg-card-hover: #1a1a26;
+  --text: #d4d0c8;
+  --text-dim: #8a8678;
+  --text-bright: #f0ece0;
+  --accent-soc: #c4956a;
+  --accent-math: #6a8fc4;
+  --accent-phys: #7bc46a;
+  --accent-soc-dim: rgba(196,149,106,0.15);
+  --accent-math-dim: rgba(106,143,196,0.15);
+  --accent-phys-dim: rgba(123,196,106,0.15);
+  --border: rgba(212,208,200,0.08);
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Source Sans 3', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+
+/* --- HERO --- */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 25% 40%, var(--accent-soc-dim), transparent),
+    radial-gradient(ellipse 500px 500px at 50% 60%, var(--accent-math-dim), transparent),
+    radial-gradient(ellipse 600px 400px at 75% 45%, var(--accent-phys-dim), transparent);
+  opacity: 0.6;
+  animation: heroBreath 12s ease-in-out infinite alternate;
+}
+
+@keyframes heroBreath {
+  0% { opacity: 0.4; transform: scale(1); }
+  100% { opacity: 0.7; transform: scale(1.05); }
+}
+
+.hero-content { position: relative; z-index: 1; max-width: 800px; }
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 400;
+  color: var(--text-bright);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--accent-soc), var(--accent-math), var(--accent-phys));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero .subtitle {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-style: italic;
+  color: var(--text-dim);
+  max-width: 600px;
+  margin: 0 auto 3rem;
+}
+
+.hero .byline {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  animation: bob 2s ease-in-out infinite;
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* --- MAIN CONTENT --- */
+.content {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 2rem 6rem;
+}
+
+.section {
+  margin-bottom: 6rem;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 400;
+  color: var(--text-bright);
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+h3 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 2.5rem 0 1rem;
+  color: var(--text-bright);
+}
+
+p { margin-bottom: 1.3rem; }
+
+.lead {
+  font-size: 1.15rem;
+  color: var(--text-bright);
+  line-height: 1.8;
+}
+
+/* --- FIELD LABEL TAGS --- */
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.2em 0.7em;
+  border-radius: 3px;
+  margin-right: 0.5em;
+  vertical-align: middle;
+}
+.tag-soc { background: var(--accent-soc-dim); color: var(--accent-soc); border: 1px solid rgba(196,149,106,0.3); }
+.tag-math { background: var(--accent-math-dim); color: var(--accent-math); border: 1px solid rgba(106,143,196,0.3); }
+.tag-phys { background: var(--accent-phys-dim); color: var(--accent-phys); border: 1px solid rgba(123,196,106,0.3); }
+
+/* --- AXIOM TABLE --- */
+.axiom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 2rem 0;
+  font-size: 0.92rem;
+}
+
+.axiom-grid .cell {
+  background: var(--bg-card);
+  padding: 1rem 1.2rem;
+  transition: background 0.3s;
+}
+
+.axiom-grid .cell:hover {
+  background: var(--bg-card-hover);
+}
+
+.axiom-grid .header {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  background: rgba(255,255,255,0.02);
+  padding: 0.8rem 1.2rem;
+}
+
+.axiom-grid .header.h-soc { color: var(--accent-soc); }
+.axiom-grid .header.h-math { color: var(--accent-math); }
+.axiom-grid .header.h-phys { color: var(--accent-phys); }
+
+.axiom-grid .row-label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-bright);
+  background: rgba(255,255,255,0.015);
+}
+
+/* --- RESONANCE CARDS --- */
+.resonance-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 2rem 2.2rem;
+  margin: 2.5rem 0;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.4s;
+}
+
+.resonance-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px;
+  height: 100%;
+}
+
+.resonance-card.rc-soc::before { background: var(--accent-soc); }
+.resonance-card.rc-math::before { background: var(--accent-math); }
+.resonance-card.rc-phys::before { background: var(--accent-phys); }
+.resonance-card.rc-all::before {
+  background: linear-gradient(180deg, var(--accent-soc), var(--accent-math), var(--accent-phys));
+}
+
+.resonance-card:hover { border-color: rgba(212,208,200,0.15); }
+
+.resonance-card .rc-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-bright);
+  margin-bottom: 0.8rem;
+}
+
+.resonance-card p { font-size: 0.95rem; margin-bottom: 0.8rem; }
+.resonance-card p:last-child { margin-bottom: 0; }
+
+/* --- EQUATION BLOCKS --- */
+.eq-block {
+  background: var(--bg-card);
+  border-left: 3px solid var(--accent-math);
+  padding: 1.2rem 1.5rem;
+  margin: 1.5rem 0;
+  border-radius: 0 6px 6px 0;
+  overflow-x: auto;
+  font-size: 1.05rem;
+}
+
+/* --- PULL QUOTES --- */
+.pull-quote {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-style: italic;
+  color: var(--text-bright);
+  text-align: center;
+  padding: 2.5rem 1rem;
+  margin: 3rem 0;
+  position: relative;
+  line-height: 1.5;
+}
+
+.pull-quote::before, .pull-quote::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 1px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(90deg, var(--accent-soc), var(--accent-math), var(--accent-phys));
+}
+
+.pull-quote::after { margin: 1.5rem auto 0; }
+
+/* --- INTERACTIVE TABS --- */
+.tabs {
+  display: flex;
+  gap: 0;
+  margin: 2rem 0 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab-btn {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  padding: 0.8rem 1.5rem;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s;
+}
+
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active-soc { color: var(--accent-soc); border-bottom-color: var(--accent-soc); }
+.tab-btn.active-math { color: var(--accent-math); border-bottom-color: var(--accent-math); }
+.tab-btn.active-phys { color: var(--accent-phys); border-bottom-color: var(--accent-phys); }
+
+.tab-panel {
+  display: none;
+  padding: 1.5rem 0;
+  animation: fadeIn 0.4s ease;
+}
+
+.tab-panel.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- CONVERGENCE DIAGRAM --- */
+.convergence {
+  position: relative;
+  height: 360px;
+  margin: 3rem 0;
+}
+
+.conv-node {
+  position: absolute;
+  width: 160px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 1rem;
+  border-radius: 50%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.conv-node:hover {
+  transform: scale(1.08);
+}
+
+.conv-soc {
+  top: 0; left: 50%; transform: translateX(-50%);
+  background: var(--accent-soc-dim);
+  border: 1.5px solid rgba(196,149,106,0.4);
+  color: var(--accent-soc);
+}
+
+.conv-math {
+  bottom: 0; left: 10%;
+  background: var(--accent-math-dim);
+  border: 1.5px solid rgba(106,143,196,0.4);
+  color: var(--accent-math);
+}
+
+.conv-phys {
+  bottom: 0; right: 10%;
+  background: var(--accent-phys-dim);
+  border: 1.5px solid rgba(123,196,106,0.4);
+  color: var(--accent-phys);
+}
+
+.conv-center {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--text-dim);
+  text-align: center;
+  width: 140px;
+}
+
+.conv-line {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform-origin: center;
+  height: 1px;
+  background: var(--border);
+  z-index: -1;
+}
+
+/* --- FOOTER --- */
+.footer {
+  text-align: center;
+  padding: 3rem 2rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  border-top: 1px solid var(--border);
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* --- KATEX OVERRIDES --- */
+.katex { color: var(--text-bright); font-size: 1em; }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 700px) {
+  .axiom-grid {
+    grid-template-columns: 1fr;
+  }
+  .axiom-grid .header { display: none; }
+  .axiom-grid .cell::before {
+    content: attr(data-col);
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    margin-bottom: 0.3rem;
+  }
+  .convergence { height: auto; display: flex; flex-direction: column; gap: 1rem; align-items: center; }
+  .conv-node { position: static; transform: none !important; border-radius: 12px; width: 80%; aspect-ratio: auto; }
+  .conv-center { position: static; transform: none; margin: 1rem 0; }
+  .conv-line { display: none; }
+  body { font-size: 16px; }
+}
+
+/* --- PRINT --- */
+@media print {
+  .hero { min-height: auto; padding: 2rem 0; }
+  .hero::before { display: none; }
+  .scroll-hint { display: none; }
+  .section { opacity: 1 !important; transform: none !important; }
+  body { background: white; color: #222; font-size: 11pt; }
+  .resonance-card { border: 1px solid #ccc; }
+  h2, h3, .pull-quote, .hero h1 { color: #111; }
+  .tag { border: 1px solid #999; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====================== HERO ====================== -->
+<header class="hero">
+  <div class="hero-content">
+    <h1>Three <em>Fields</em></h1>
+    <p class="subtitle">
+      A word that recurs across the sciences is rarely an accident.
+      Sociologists, mathematicians, and physicists each claim it -- and each mean something
+      structurally kindred.
+    </p>
+    <p class="byline">Dwight School London &middot; Natural Sciences &amp; TOK</p>
+  </div>
+  <div class="scroll-hint">&darr; scroll</div>
+</header>
+
+<!-- ====================== CONTENT ====================== -->
+<main class="content">
+
+<!-- ---- SECTION 1: THE WORD ---- -->
+<section class="section" id="s-word">
+  <h2>One Word, Three Architectures</h2>
+  <p class="lead">
+    The word <em>field</em> does not merely recur by lexical coincidence. In each of its homes it names the same deep pattern: a <strong>space</strong> equipped with <strong>rules of combination</strong> that assign <strong>relational values</strong> to every position within it. The differences matter, but the skeleton is shared.
+  </p>
+  <p>
+    Pierre Bourdieu's sociological field is a space of positions defined by differential possession of capital. The mathematical field is a set closed under two operations satisfying axioms you likely take for granted. Faraday's physical field assigns measurable values -- scalar, vector, tensor, spinor -- to every point of spacetime. In each case we find the same grammar: an arena, a set of operations, and a structure that emerges from how elements relate rather than from what they intrinsically "are."
+  </p>
+</section>
+
+<!-- ---- SECTION 2: BOURDIEU ---- -->
+<section class="section" id="s-soc">
+  <h2><span class="tag tag-soc">Sociological</span> Bourdieu's Field</h2>
+  <p>
+    For Bourdieu, a <em>field</em> (le champ) is a structured social space -- the literary field, the academic field, the field of power -- in which agents occupy positions determined by the volume and composition of their capital. The field is not a container; it is constituted by the relational differences between positions.
+  </p>
+  <p>
+    Capital comes in species: economic, cultural, social, symbolic. An agent's position is not a single number but a vector -- a multi-component quantity specifying how much of each form of capital they hold. The field has its own "rules of the game" (the <em>nomos</em>), and agents carry dispositions (<em>habitus</em>) shaped by their trajectory through the field.
+  </p>
+
+  <div class="resonance-card rc-soc">
+    <div class="rc-title">Key structural features</div>
+    <p>
+      <strong>Relational ontology:</strong> positions are defined by differences, not intrinsic properties. No agent's capital has meaning except in relation to the distribution of capital across all other agents.
+    </p>
+    <p>
+      <strong>Autonomy and coupling:</strong> each field has its own logic, but fields exert forces on one another. The economic field exerts gravitational pull on the academic field, distorting its internal valuations.
+    </p>
+    <p>
+      <strong>Conservation and exchange:</strong> capital can be converted between forms (cultural capital into economic capital, say), but at exchange rates set by the field's own structure.
+    </p>
+  </div>
+</section>
+
+<!-- ---- SECTION 3: MATHEMATICAL FIELD ---- -->
+<section class="section" id="s-math">
+  <h2><span class="tag tag-math">Mathematical</span> The Algebraic Field</h2>
+  <p>
+    A field in the algebraic sense is a set \(\mathbb{F}\) equipped with two binary operations, addition and multiplication, satisfying a suite of axioms -- closure, associativity, commutativity, distributivity, identity elements, and inverses -- for both operations. What this means concretely: you can add, subtract, multiply, and divide (by anything nonzero) and never leave the set.
+  </p>
+
+  <div class="eq-block">
+    $$(\mathbb{F},\,+,\,\cdot\,) \quad\text{such that}\quad \forall\, a \neq 0,\;\exists\, a^{-1}:\; a \cdot a^{-1} = 1$$
+  </div>
+
+  <p>
+    The rationals \(\mathbb{Q}\), the reals \(\mathbb{R}\), and the complex numbers \(\mathbb{C}\) are the canonical examples. The integers \(\mathbb{Z}\) fail -- they form only a ring, since most elements lack multiplicative inverses. This is the algebraic expression of what it means for a measurement scale to be a ratio scale in Stevens' sense: the existence of division is precisely the closure under ratios.
+  </p>
+
+  <div class="resonance-card rc-math">
+    <div class="rc-title">Where nature drops axioms</div>
+    <p>
+      The quaternions \(\mathbb{H}\) sacrifice commutativity: \(ij = k\) but \(ji = -k\). They form a <em>division algebra</em> (every nonzero element still has a multiplicative inverse) but not a field. The octonions \(\mathbb{O}\) drop associativity as well. By Hurwitz's theorem, these are the only normed division algebras over the reals: \(\mathbb{R}, \mathbb{C}, \mathbb{H}, \mathbb{O}\) -- dimensions 1, 2, 4, 8.
+    </p>
+    <p>
+      Physics seems to care about exactly this sequence. Spinors live in \(\mathbb{C}\) and \(\mathbb{H}\). The exceptional Lie groups, built from \(\mathbb{O}\), surface in string compactifications. The axioms you drop determine the physics you get.
+    </p>
+  </div>
+</section>
+
+<!-- ---- SECTION 4: PHYSICAL FIELD ---- -->
+<section class="section" id="s-phys">
+  <h2><span class="tag tag-phys">Physical</span> Faraday's Field</h2>
+  <p>
+    Faraday's field is a map from spacetime to values: assign to every point \(x^\mu\) a number, a vector, a tensor, or a spinor. A temperature distribution is a scalar field \(T(x)\). The electromagnetic field is a 2-form \(F_{\mu\nu}(x)\). The metric of general relativity is a symmetric rank-2 tensor field \(g_{\mu\nu}(x)\).
+  </p>
+  <p>
+    The field concept is not merely descriptive bookkeeping. The electromagnetic field carries energy and momentum; it is dynamical. The Higgs field pervades all of space, and the values it takes (specifically, the fact that it sits in a nonzero vacuum expectation value) give mass to quarks and leptons. A field is not a summary of measurements -- it is the ontological thing doing the interacting.
+  </p>
+
+  <div class="resonance-card rc-phys">
+    <div class="rc-title">Fields and measurement scales</div>
+    <p>
+      Every physical field assigns values drawn from a mathematical field (or a structure built atop one). The temperature field takes values in \(\mathbb{R}\). The electromagnetic potential takes values in a \(U(1)\) fibre -- locally, complex numbers of unit modulus. The connection of general relativity takes values in the Lie algebra of \(GL(4,\mathbb{R})\). The physical field is the mathematical field made spatial.
+    </p>
+    <p>
+      For the values to be comparable -- for a ratio scale to exist -- we need a well-defined origin and closure under division. Natural units (\(c = \hbar = 1\)) collapse the three kinematical dimensions onto energy, leaving dimensionless coupling constants like the fine-structure constant \(\alpha = e^2/4\pi \approx 1/137\). These are the field values that transcend any human choice of units.
+    </p>
+  </div>
+</section>
+
+<!-- ---- PULL QUOTE ---- -->
+<div class="pull-quote">
+  "A field is a space in which positions derive their meaning<br>
+  from the structure of relations, not from intrinsic essence."
+</div>
+
+<!-- ---- SECTION 5: THE CORRESPONDENCE TABLE ---- -->
+<section class="section" id="s-table">
+  <h2>The Structural Correspondence</h2>
+  <p>
+    The following table is not a metaphor. It is a claim about shared architecture.
+  </p>
+
+  <div class="axiom-grid">
+    <div class="cell header h-soc">Sociological</div>
+    <div class="cell header h-math">Mathematical</div>
+    <div class="cell header h-phys">Physical</div>
+
+    <div class="cell row-label" data-col="Concept" style="grid-column: 1 / -1; text-align: center; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim);">The Arena</div>
+    <div class="cell" data-col="Sociological">The social space of positions (literary field, academic field, field of power)</div>
+    <div class="cell" data-col="Mathematical">The set \(\mathbb{F}\) equipped with \(+\) and \(\cdot\)</div>
+    <div class="cell" data-col="Physical">Spacetime manifold \(\mathcal{M}\) with a field \(\phi: \mathcal{M} \to V\)</div>
+
+    <div class="cell row-label" data-col="Concept" style="grid-column: 1 / -1; text-align: center; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim);">Elements</div>
+    <div class="cell" data-col="Sociological">Agents carrying capital vectors \((k_e, k_c, k_s, k_\sigma)\)</div>
+    <div class="cell" data-col="Mathematical">Elements of \(\mathbb{F}\) (numbers, polynomials, functions...)</div>
+    <div class="cell" data-col="Physical">Field values: scalars, vectors, tensors, spinors at each point</div>
+
+    <div class="cell row-label" data-col="Concept" style="grid-column: 1 / -1; text-align: center; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim);">Operations / Rules</div>
+    <div class="cell" data-col="Sociological">Nomos (rules of the game); capital accumulation and conversion</div>
+    <div class="cell" data-col="Mathematical">Addition, multiplication, and their axioms</div>
+    <div class="cell" data-col="Physical">Field equations (Maxwell, Einstein, Yang-Mills); gauge symmetries</div>
+
+    <div class="cell row-label" data-col="Concept" style="grid-column: 1 / -1; text-align: center; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim);">Relational Structure</div>
+    <div class="cell" data-col="Sociological">Position defined by <em>difference</em> in capital; no absolute meaning</div>
+    <div class="cell" data-col="Mathematical">Elements defined only by their behaviour under operations (structuralism)</div>
+    <div class="cell" data-col="Physical">Gauge invariance: only relative phases / differences are physical</div>
+
+    <div class="cell row-label" data-col="Concept" style="grid-column: 1 / -1; text-align: center; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim);">What "Zero" Means</div>
+    <div class="cell" data-col="Sociological">The absence of capital in all forms -- an impossible limit point</div>
+    <div class="cell" data-col="Mathematical">The additive identity; the element that changes nothing</div>
+    <div class="cell" data-col="Physical">The vacuum state -- which is never truly empty (Casimir, zero-point energy)</div>
+
+    <div class="cell row-label" data-col="Concept" style="grid-column: 1 / -1; text-align: center; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim);">Symmetry Breaking</div>
+    <div class="cell" data-col="Sociological">Dominant capital species varies by field (cultural in academia, economic in business)</div>
+    <div class="cell" data-col="Mathematical">Dropping commutativity (\(\mathbb{H}\)) or associativity (\(\mathbb{O}\)) yields new algebras</div>
+    <div class="cell" data-col="Physical">Spontaneous symmetry breaking (Higgs mechanism); gauge fixing</div>
+  </div>
+</section>
+
+<!-- ---- SECTION 6: DEEPER RESONANCES ---- -->
+<section class="section" id="s-resonance">
+  <h2>Three Deeper Resonances</h2>
+
+  <!-- Tabs for the three resonances -->
+  <div class="tabs">
+    <button class="tab-btn active-soc" data-tab="t1" onclick="switchTab(this, 't1', 'soc')">Ratio &amp; Capital</button>
+    <button class="tab-btn" data-tab="t2" onclick="switchTab(this, 't2', 'math')">Gauge &amp; Habitus</button>
+    <button class="tab-btn" data-tab="t3" onclick="switchTab(this, 't3', 'phys')">Vacuum &amp; Doxa</button>
+  </div>
+
+  <div class="tab-panel active" id="t1">
+    <h3>The Ratio Scale as Common Ground</h3>
+    <p>
+      Stevens' ratio scale -- the one that admits geometric and harmonic means, not just arithmetic -- requires a well-defined origin and closure under division. This is exactly the algebraic field condition. Physical measurement in ratio-scale quantities (mass, charge, temperature in Kelvin) is possible <em>because</em> the values form a field.
+    </p>
+    <p>
+      Bourdieu's capital, too, is implicitly ratio-scaled. To say one agent has "twice the cultural capital" of another is to invoke closure under division. The entire machinery of his correspondence analysis -- plotting agents in capital-space -- presupposes that the axes carry ratio-scale meaning. The sociological field inherits the algebraic field's structure whether Bourdieu noticed or not.
+    </p>
+    <p>
+      The astronomical magnitude scale in your original piece is a beautiful illustration: our perception is logarithmic, mapping the ratio scale onto an interval scale. The same compression happens in Bourdieu's analysis of taste -- the enormous ratios in economic capital between social classes are <em>experienced</em> as gradual, "natural" distinctions by the agents immersed in the field.
+    </p>
+  </div>
+
+  <div class="tab-panel" id="t2">
+    <h3>Gauge Freedom and Habitus</h3>
+    <p>
+      In gauge theory, the field values at a point are not directly physical -- only gauge-invariant combinations (traces, Wilson loops, field strengths) carry observable content. You can rotate the internal space at every point independently (a local gauge transformation) without changing any measurement.
+    </p>
+    <p>
+      Bourdieu's <em>habitus</em> functions analogously. The habitus is the set of dispositions an agent carries -- but it is not directly observable. What is observable is practice: the actions an agent takes. Different dispositions can generate the same practice (just as different gauge choices yield the same physics). The habitus is the gauge degree of freedom of the sociological field.
+    </p>
+    <p>
+      This is not idle metaphor. In both cases, the unobservable layer (gauge choice, habitus) is the thing that makes the theory <em>local</em> -- it allows you to write down equations of motion (or models of practice) that depend only on the neighbourhood of a point, not on the global state of the field.
+    </p>
+  </div>
+
+  <div class="tab-panel" id="t3">
+    <h3>The Vacuum and the Doxa</h3>
+    <p>
+      The vacuum in quantum field theory is not nothing. It is the lowest-energy state of the field, and it can have nontrivial structure: the Higgs field's vacuum expectation value is nonzero, and this is what gives particles mass. The vacuum is invisible to agents within the theory precisely because it is everywhere -- it is the background against which excitations are defined.
+    </p>
+    <p>
+      Bourdieu's <em>doxa</em> is the set of presuppositions so deeply shared by all agents in a field that they are never questioned -- indeed, never even articulated. The doxa is the sociological vacuum: the background expectation value of belief that makes the field's structure possible but that no agent within the field can easily see.
+    </p>
+    <p>
+      In both cases, making the vacuum/doxa visible requires an external perspective or a crisis. Spontaneous symmetry breaking in physics reveals the vacuum's structure. A social revolution (or Bourdieu's own sociological analysis) reveals the doxa. The mathematical analogue: the additive identity 0 is the element you never notice until you study the axioms.
+    </p>
+  </div>
+</section>
+
+<!-- ---- SECTION 7: NATURAL UNITS AND DIMENSIONLESS CONSTANTS ---- -->
+<section class="section" id="s-units">
+  <h2>The Dimensionless and the Universal</h2>
+  <p>
+    Natural units (\(c = \hbar = 1\)) impose two constraints on three kinematical dimensions, leaving energy as the single free unit. In this system, force has dimensions \(E^2\), distance has dimensions \(1/E\), and the elementary charge \(e\) becomes dimensionless. The fine-structure constant
+  </p>
+  <div class="eq-block">
+    $$\alpha = \frac{e^2}{4\pi} \approx \frac{1}{137}$$
+  </div>
+  <p>
+    is then a pure number -- independent of any human measurement convention. It is the field's structure constant in every sense: it measures the strength of coupling between charged matter and the electromagnetic field. An alien civilisation with utterly different units would arrive at the same number.
+  </p>
+  <p>
+    This is the endpoint of the ratio-scale story. A ratio scale needs a well-defined origin and closure under division -- it needs field structure. Natural units strip away the conventional scaffolding until only the dimensionless coupling constants remain. These are the numbers that characterise the physical field in a way that is, in Stevens' terminology, absolute rather than merely ratio-scaled.
+  </p>
+  <p>
+    Bourdieu never had dimensionless constants, but the aspiration is the same: to identify the structural invariants of a social field that transcend the particular coordinates (national context, historical period) in which you happen to describe them. The reproduction rate of cultural capital across generations in the academic field might be sociology's fine-structure constant -- if you could measure it with enough precision.
+  </p>
+</section>
+
+<!-- ---- CONVERGENCE DIAGRAM ---- -->
+<section class="section" id="s-conv">
+  <h2>Convergence</h2>
+  <p>
+    The three fields converge on a single insight: <strong>structure is relational, not substantial.</strong> What an element "is" cannot be stated independently of the operations and relations that bind it to every other element. The number 3 is not a thing in itself; it is a position in the field \(\mathbb{Q}\). A quark is not a thing in itself; it is an excitation pattern in the gauge field. A professor is not a thing in themselves; they are a position in the academic field, defined by differential capital.
+  </p>
+
+  <div class="convergence">
+    <div class="conv-node conv-soc">Sociological<br>Field</div>
+    <div class="conv-node conv-math">Mathematical<br>Field</div>
+    <div class="conv-node conv-phys">Physical<br>Field</div>
+    <div class="conv-center"><em>Relational<br>structure</em></div>
+    <svg style="position:absolute;inset:0;width:100%;height:100%;z-index:-1;" viewBox="0 0 600 360" preserveAspectRatio="xMidYMid meet">
+      <line x1="300" y1="80" x2="150" y2="280" stroke="rgba(212,208,200,0.1)" stroke-width="1"/>
+      <line x1="300" y1="80" x2="450" y2="280" stroke="rgba(212,208,200,0.1)" stroke-width="1"/>
+      <line x1="150" y1="280" x2="450" y2="280" stroke="rgba(212,208,200,0.1)" stroke-width="1"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ---- SECTION 8: CODA ---- -->
+<section class="section" id="s-coda">
+  <h2>Coda: Why the Same Word?</h2>
+  <p>
+    The persistence of the word is not a failure of imagination. It records a genuine structural homology: the pattern of an arena whose elements derive meaning from rules of combination and relative position. The sociological field borrowed from the physical field (Bourdieu acknowledged Faraday and Maxwell explicitly). The physical field, in turn, presupposes the mathematical field for its values to form a ratio scale at all.
+  </p>
+  <p>
+    The deeper question -- whether there is a single abstract structure of which all three are instances -- belongs to category theory, where a "field" in any of these senses might be formalised as a functor from some structured category to another. That formalisation would be a fourth field. But that is another essay.
+  </p>
+</section>
+
+</main>
+
+<footer class="footer">
+  Dwight School London &middot; Department of Natural Sciences &middot; 2026
+</footer>
+
+<!-- ====================== SCRIPTS ====================== -->
+<script>
+// Render KaTeX
+document.addEventListener('DOMContentLoaded', () => {
+  renderMathInElement(document.body, {
+    delimiters: [
+      { left: '$$', right: '$$', display: true },
+      { left: '\\(', right: '\\)', display: false }
+    ],
+    throwOnError: false
+  });
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+// Tabs
+function switchTab(btn, panelId, color) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.className = 'tab-btn');
+  btn.classList.add('active-' + color);
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(panelId).classList.add('active');
+}
+</script>
+
+</body>
+</html>
