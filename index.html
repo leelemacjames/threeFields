@@ -430,6 +430,49 @@ p { margin-bottom: 1.3rem; }
   margin: 0 auto;
 }
 
+/* --- SCALE TYPE CARDS --- */
+.scale-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 2rem 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.scale-card {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  background: var(--bg-card);
+  transition: background 0.3s;
+}
+
+.scale-card:hover { background: var(--bg-card-hover); }
+
+.scale-label {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem;
+  border-right: 1px solid var(--border);
+}
+
+.scale-ordinal .scale-label { color: #b8a080; background: rgba(184,160,128,0.06); }
+.scale-interval .scale-label { color: #a08cb8; background: rgba(160,140,184,0.06); }
+.scale-ratio .scale-label { color: var(--accent-math); background: var(--accent-math-dim); }
+
+.scale-body { padding: 1.2rem 1.5rem; }
+.scale-body p { margin-bottom: 0; font-size: 0.95rem; }
+
+@media (max-width: 700px) {
+  .scale-card { grid-template-columns: 1fr; }
+  .scale-label { border-right: none; border-bottom: 1px solid var(--border); padding: 0.8rem; }
+}
+
 /* --- KATEX OVERRIDES --- */
 .katex { color: var(--text-bright); font-size: 1em; }
 
@@ -480,7 +523,7 @@ p { margin-bottom: 1.3rem; }
       Sociologists, mathematicians, and physicists each claim it -- and each mean something
       structurally kindred.
     </p>
-    <p class="byline">Lee McCulloch-James, Dwight London &middot; Natural Sciences &amp; TOK</p>
+    <p class="byline">Dwight School London &middot; Natural Sciences &amp; TOK</p>
   </div>
   <div class="scroll-hint">&darr; scroll</div>
 </header>
@@ -496,6 +539,63 @@ p { margin-bottom: 1.3rem; }
   </p>
   <p>
     Pierre Bourdieu's sociological field is a space of positions defined by differential possession of capital. The mathematical field is a set closed under two operations satisfying axioms you likely take for granted. Faraday's physical field assigns measurable values -- scalar, vector, tensor, spinor -- to every point of spacetime. In each case we find the same grammar: an arena, a set of operations, and a structure that emerges from how elements relate rather than from what they intrinsically "are."
+  </p>
+  <p>
+    But before we can speak of fields, we need to ask a prior question: what kind of <em>numbers</em> are we assigning? Not all measurement scales are equal, and the kind of scale determines which mathematical operations are permissible. This is where the story properly begins.
+  </p>
+</section>
+
+<!-- ---- SECTION 1b: STEVENS' SCALES ---- -->
+<section class="section" id="s-scales">
+  <h2>The Grammar of Measurement</h2>
+  <p>
+    The psychologist Stanley Smith Stevens identified three quantitative number scales, each permitting different operations and different notions of "average." The distinctions are not pedantic -- they determine what it means to compare two measurements at all.
+  </p>
+
+  <!-- Scale type cards -->
+  <div class="scale-cards">
+    <div class="scale-card scale-ordinal">
+      <div class="scale-label">Ordinal</div>
+      <div class="scale-body">
+        <p>Rank ordering: 1st, 2nd, 3rd... The natural counting numbers. You know that gold beats silver and silver beats bronze, but not by how much. The <em>median</em> is the only meaningful central tendency. Sorting is the characteristic operation.</p>
+      </div>
+    </div>
+    <div class="scale-card scale-interval">
+      <div class="scale-label">Interval</div>
+      <div class="scale-body">
+        <p>Differences are meaningful, but ratios are not, because the origin is arbitrary. Celsius temperature: 20&deg;C is not "twice as hot" as 10&deg;C. Percentage change (a first difference as a fraction of the original) lives here too. The <em>arithmetic mean</em> is the strongest permissible average. The underlying geometry is <strong>affine</strong> -- only ratios of differences can be expressed.</p>
+      </div>
+    </div>
+    <div class="scale-card scale-ratio">
+      <div class="scale-label">Ratio</div>
+      <div class="scale-body">
+        <p>A well-defined origin makes ratios meaningful: one quantity can be twice another. Mass, charge, temperature in Kelvin. The line is <strong>closed under division</strong>. In addition to the arithmetic mean, the <em>geometric mean</em> (think: root mean square of an AC circuit) and the <em>harmonic mean</em> (think: equivalent conductance of parallel resistors) become valid measures of central tendency.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="resonance-card rc-all">
+    <div class="rc-title">Perception compresses ratio scales into interval scales</div>
+    <p>
+      On a greyscale from 0 to 255, our eyes perceive brightness values that increase geometrically -- 2, 4, 8, 16 -- as if they advance in equal steps. The jumps look enormous at the dark end and negligible at the bright end. Our perception applies a logarithm, converting the ratio scale of physical luminance into an interval scale of perceived brightness.
+    </p>
+    <p>
+      Astronomers discovered the same compression independently. One star is just noticeably brighter than another when its light is about 2.51 times greater. This is the basis of the stellar magnitude scale: a Magnitude 7 star is \(2.51^6 \approx 250\) times as luminous as a Magnitude 1 star, but the magnitudes themselves are spaced as an interval scale -- equal perceptual steps on a logarithmic ruler.
+    </p>
+  </div>
+
+  <h3>The Affine Space of Interval Measurement</h3>
+  <p>
+    An interval scale, lacking a well-defined origin, inhabits what mathematicians call an <em>affine</em> space. You cannot say "this value is twice that value," only "the difference between A and B is twice the difference between C and D." This is why percentage returns rather than raw prices are the natural objects of study in time series analysis: stock prices live on a ratio scale, but it is the log-prices (or equivalently the percentage returns) that turn out to be stationary -- modelable as draws from a stable probability distribution. The passage from price to return is the passage from ratio to interval, and it is precisely the operation that reveals the underlying statistical regularity.
+  </p>
+
+  <div class="pull-quote" style="margin: 2.5rem 0 2rem;">
+    The ratio scale is the one that demands field structure.<br>
+    Closure under division is the algebraic field axiom in disguise.
+  </div>
+
+  <p>
+    This is the hinge. A ratio scale requires a well-defined zero and the ability to divide any value by any nonzero value and remain in the set. That is precisely the definition of a mathematical field. The measurement theory of Stevens and the abstract algebra of Galois converge on the same structure from opposite directions -- one from the question "what operations does my data permit?" and the other from "what axioms must a number system satisfy?" The rest of this essay traces what happens when that structure is given a spatial address.
   </p>
 </section>
 
@@ -763,3 +863,4 @@ function switchTab(btn, panelId, color) {
 
 </body>
 </html>
+
